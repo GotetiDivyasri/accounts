@@ -23,6 +23,14 @@
                                     <div class="card-body">
                                         <form id="formAuthentication" class="mb-3" action="{{route('login') }}" method="POST">
                                             @csrf
+
+                                            @if($errors->any())
+                                                <div class="alert alert-danger">
+                                                    @foreach($errors->all() as $error)
+                                                        <div>{{ $error }}</div>
+                                                    @endforeach
+                                                </div>
+                                            @endif
                                             <div class="form-floating mb-3">
                                                 <input class="form-control" id="username" name="username" type="username" placeholder="name@example.com" />
                                                 <label for="inputEmail">Email address</label>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Accounts;
 use Illuminate\Http\Request;
 
 class AccountsController extends Controller
@@ -12,7 +13,9 @@ class AccountsController extends Controller
      */
     public function index()
     {
-        return view('admin.accounts'); 
+        $accounts = Accounts::orderBy('selected_date', 'desc')->get();
+        return view('admin.accounts', compact('accounts'));
+        // return view('admin.accounts'); 
     }
 
     /**
@@ -20,7 +23,7 @@ class AccountsController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.accounts_add'); 
     }
 
     /**
@@ -28,7 +31,7 @@ class AccountsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request);
     }
 
     /**
@@ -36,7 +39,8 @@ class AccountsController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $account = Accounts::with('selected_date')->findOrFail($id);
+        return view('admin.accounts_show', compact('account'));
     }
 
     /**
@@ -44,7 +48,8 @@ class AccountsController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $account = Accounts::with('selected_date')->findOrFail($id);
+        return view('admin.accounts_edit', compact('account'));
     }
 
     /**
@@ -60,6 +65,10 @@ class AccountsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $account = Accounts::findOrFail($id);
+        $account->transactions()->delete();
+        $account->delete();
+
+        return redirect()->route('accounts.index')->with('success', 'Account deleted successfully.');
     }
 }

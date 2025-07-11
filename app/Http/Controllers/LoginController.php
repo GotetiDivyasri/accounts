@@ -19,18 +19,36 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $request->validate([
-            'username' => 'required',
-            'password' => 'required',
-        ]);
         $credentials = $request->only(['username', 'password']);
+
+        // First, check if the username exists
+        $user = \App\Models\Admins::where('username', $credentials['username'])->first();
+
+        if (!$user) {
+            // Username not found
+            return back()->withErrors([
+                'username' => 'The username is incorrect.',
+            ])->withInput();
+        }
+
+        // If username exists, now check the password
+        if (!\Illuminate\Support\Facades\Hash::check($credentials['password'], $user->password)) {
+            // Password is incorrect
+            return back()->withErrors([
+                'password' => 'The password is incorrect.',
+            ])->withInput();
+        }
+
+        // If both are correct, log the user in
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-
             return redirect()->intended('admin/dashboard');
         }
 
-        return back()->withErrors(['Invalid username or password']); 
+        // Fallback in case something else goes wrong
+        return back()->withErrors([
+            'error' => 'Login failed. Please try again.',
+        ])->withInput();
     }
 
 

@@ -19,6 +19,6 @@ Route::get('/admin/dashboard', function () {
 // })->name('admin.dashboard');
 
 Route::get('/logout', [LoginController::class, 'logout'])->name('admin.logout');
-
-Route::get('/accounts',[AccountsController::class, 'index'])->name('admin.accounts');
+Route::resource('accounts', AccountsController::class);
+Route::get('/accounts/view/{id}', [AccountsController::class, 'show'])->name('admin.accounts_view');
 

@@ -8,7 +8,7 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Dashboard
                 </a>
-                <a class="nav-link" href="{{ route('admin.accounts') }}">
+                <a class="nav-link" href="{{ route('accounts.index') }}">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Accounts
                 </a>

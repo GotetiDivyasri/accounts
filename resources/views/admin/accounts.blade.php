@@ -2,43 +2,36 @@
 
 @section('title','Admin Dashboard')
 @section('content')
-<main>
-<div class="container-fluid px-4">
-    <h1 class="mt-4">Accounts</h1>
-    <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item"><a href="{{route('dashboard')}}">Dashboard</a></li>
-        <li class="breadcrumb-item active">Accounts</li>
-    </ol>
-    <div class="card mb-4">
-        {{-- <div class="card-header">
-            <i class="fas fa-table me-1"></i>
-            DataTable Example
-        </div> --}} 
-        <div class="card-body">
-            <table id="datatablesSimple">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Position</th>
-                        <th>Office</th>
-                        <th>Age</th>
-                        <th>Start date</th>
-                        <th>Salary</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Tiger Nixon</td>
-                        <td>System Architect</td>
-                        <td>Edinburgh</td>
-                        <td>61</td>
-                        <td>2011/04/25</td>
-                        <td>$320,800</td>
-                    </tr>
-                </tbody> 
-            </table>
-        </div>
+<div class="container">
+    <h2 class="mb-4">Accounts List</h2>
+
+    <div class="mb-3 text-end">
+        <a href="{{ route('accounts.create') }}" class="btn btn-success">+ Add Account</a>
     </div>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Present Amount</th>
+                <th>Total Transactions</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($accounts as $account)
+                <tr>
+                    <td>{{ \Carbon\Carbon::parse($account->transaction_date)->format('d-m-Y') }}</td>
+                    <td>{{ $account->present_amount }}</td>
+                    <td>{{ count($account->transactions ?? []) }}</td>
+                    <td>
+                        <a href="{{ route('accounts.edit', $account->id) }}" class="btn btn-primary btn-sm">Edit</a>
+                        <a href="{{ route('accounts.destroy', $account->id) }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</a>
+                        <a href="{{ route('accounts.show', $account->id) }}" class="btn btn-info btn-sm">View</a>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
 </div>
-</main>
-@endsection 
+@endsection
